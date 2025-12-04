@@ -1,0 +1,8 @@
+[package]
+name = "rust_loader"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+elf_loader = "0.13.0"
+libc = "0.2.178"
