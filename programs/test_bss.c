@@ -6,6 +6,8 @@ int uninitialized_array[1000];
 
 void entry(void) {
     printf("test_bss: starting\n");
+    printf("test_bss: start of bss: %p\n", &large_buffer[0]);
+    printf("test_bss: end of bss: %p\n", &uninitialized_array[1000]);
     
     int non_zero = 0;
     for (int i = 0; i < 1000; i++) {

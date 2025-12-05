@@ -88,8 +88,31 @@ impl Mmap for RegionMmap {
         prot: ProtFlags,
         flags: MapFlags,
     ) -> elf_loader::Result<core::ptr::NonNull<c_void>> {
-        let mut copy = false;
-        unsafe { Self::mmap(Some(addr), len, prot, flags, 0, None, &mut copy) }
+        assert!(process_base() <= addr && addr < process_top());
+        assert!(flags.contains(MapFlags::MAP_FIXED));
+
+        if addr + len > process_max() {
+            return Err(map_error("out of process memory"));
+        }
+
+        let ptr = unsafe {
+            libc::mmap(
+                addr as _,
+                len,
+                prot.bits(),
+                flags
+                    .union(MapFlags::MAP_FIXED | MapFlags::MAP_ANONYMOUS)
+                    .bits(),
+                -1,
+                0,
+            )
+        };
+
+        if ptr == libc::MAP_FAILED || ptr as usize != addr {
+            return Err(map_error("mmap_anonymous failed"));
+        }
+
+        Ok(unsafe { NonNull::new_unchecked(ptr) })
     }
 
     unsafe fn munmap(
