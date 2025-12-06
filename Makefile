@@ -1,9 +1,9 @@
-CC = gcc
-CFLAGS = -fPIC -Wall -Wextra
+CC = clang-14
+CFLAGS = -O2 -fPIC -Wall -Wextra
 LDFLAGS = -shared -Wl,-z,now
 
 DIR = programs
-LOADER = ./target/release/rust_loader
+LOADER = ./target/release/fixed_loader
 
 SRCS = $(wildcard $(DIR)/*.c)
 TARGETS = $(SRCS:.c=.so)
@@ -22,6 +22,10 @@ test: all
 	done
 	@echo ""
 	@echo "All tests passed!"
+
+test-all: all
+	@echo "Running all tests at once..."
+	@$(LOADER) $(TEST_TARGETS)
 
 $(DIR)/%.so: $(DIR)/%.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<

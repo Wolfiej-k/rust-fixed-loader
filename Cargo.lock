@@ -58,6 +58,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fixed_loader"
+version = "0.1.0"
+dependencies = [
+ "elf_loader",
+ "libc",
+ "rlsf",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.178"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -91,15 +100,6 @@ dependencies = [
  "const-default",
  "libc",
  "svgbobdoc",
-]
-
-[[package]]
-name = "rust_loader"
-version = "0.1.0"
-dependencies = [
- "elf_loader",
- "libc",
- "rlsf",
 ]
 
 [[package]]
