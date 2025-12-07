@@ -6,7 +6,7 @@ private heap and stack contiguous with its code and data.
 
 > **WARNING:** This library is highly experimental and relies on
 > [elf_loader](https://github.com/weizhiao/rust-elfloader) for its core
-> functionality. Expect bugs and instability.
+> functionality. Expect bugs.
 
 ### Features
  - Load `ET_DYN` ELF binaries (shared objects and PIE executables) into a fixed
