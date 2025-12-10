@@ -2,8 +2,8 @@ use fixed_loader::process::Process;
 use std::env;
 use std::ffi::CString;
 
-const PROCESS_OFFSET_STEP: usize = 1024 * 1024 * 1024 * 1024;
-const PROCESS_SIZE: usize = 16 * 1024 * 1024 * 1024;
+const PROCESS_OFFSET: usize = 1024 * 1024 * 1024 * 1024;
+const PROCESS_SIZE: usize = 1024 * 1024 * 1024;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -21,12 +21,12 @@ fn main() {
     let mut handles = Vec::new();
     for (i, path) in args[1..].iter().enumerate() {
         // Assign a unique base address
-        let base_addr = PROCESS_OFFSET_STEP + (i * PROCESS_SIZE);
+        let base_addr = PROCESS_OFFSET + (i * PROCESS_SIZE);
         let proc = Process::new(base_addr, base_addr + PROCESS_SIZE);
 
         // Fixed stack and heap sizes for now
-        let stack_size = 8 * 1024 * 1024;
-        let heap_size = 64 * 1024 * 1024;
+        let stack_size = 8 * 1024;
+        let heap_size = 8 * 1024 * 1024;
 
         // Spawn guest process
         match proc.spawn(path, "entry", stack_size, heap_size) {

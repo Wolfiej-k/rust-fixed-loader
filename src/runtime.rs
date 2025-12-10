@@ -5,13 +5,16 @@ use std::cell::RefCell;
 use std::ffi::{CString, c_void};
 use std::ptr::NonNull;
 
+/// Serves allocations up to 64 MiB.
+type Heap = Tlsf<'static, u32, u32, 20, 4>;
+
 thread_local! {
-    static THREAD_HEAP: RefCell<Option<Tlsf<'static, u16, u16, 12, 16>>> = RefCell::new(None);
+    static THREAD_HEAP: RefCell<Option<Heap>> = RefCell::new(None);
     static PROCESS_BOUNDS: RefCell<Option<ProcessBounds>> = RefCell::new(None);
 }
 
 /// Set fixed-location heap for current thread.
-pub fn set_thread_heap(heap: Tlsf<'static, u16, u16, 12, 16>) {
+pub fn set_thread_heap(heap: Heap) {
     THREAD_HEAP.with(|h| *h.borrow_mut() = Some(heap));
 }
 
